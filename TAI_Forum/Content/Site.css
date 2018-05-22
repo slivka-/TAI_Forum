@@ -1,0 +1,173 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.loginPopover {
+    width: 250px;
+}
+
+.loginPopoverContent {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.loginBold {
+    font-weight: 700;
+}
+
+.adminBar {
+    padding-left:10px;
+    margin-top: 14px;
+    color: red;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.newThreadBox {
+    background-color: gainsboro;
+    border-radius: 10px;
+    margin-left: 0px;
+    padding-left: 15px;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.newThreadBtn {
+    border-radius: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.newThreadBtnBtn {
+    display:flex;
+    justify-content: center;
+    width: 400px;
+    font-size:20px;
+    font-weight: 800;
+}
+
+.singleArticle {
+    background-color: #e1e5ed;
+    border-radius: 10px;
+    margin-left: 0px;
+    margin-bottom: 5px;
+    padding-left: 15px;
+    width: 100%;
+}
+
+.newThreadForm{
+    width: 100%;
+}
+
+.threadParthBox {
+    width: 100%;
+}
+
+.threadTitleBox {
+    overflow:hidden;
+    word-wrap:break-word;
+}
+
+.threadTextBox {
+    width: 100%;
+    max-width: unset;
+}
+
+.threadTextArea {
+    width: 100%;
+    min-height: 100px;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.delThreadBtn{
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.customLead{
+    font-size: 15px;
+    white-space: nowrap;
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+.authorBox {
+    float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+    text-align: right;
+    font-weight: 700;
+}
+
+.scoreBox {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.upvoteBtn{
+    color: green;
+}
+
+.upvoteBtn:hover{
+    color:greenyellow;
+}
+
+.upvoteBtn:visited{
+    color: gray;
+}
+
+.downvoteBtn {
+    color: red;
+}
+
+.downvoteBtn:hover {
+    color: orangered;
+}
+
+.downvoteBtn:visited {
+    color: gray;
+}
+
+.dateBox{
+    float: left;
+    margin-bottom: 10px;
+    font-weight:600;
+}
+
+.deMsglBox {
+    float: right;
+    margin-right: -5px;
+    margin-bottom: 10px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 16px;
+}

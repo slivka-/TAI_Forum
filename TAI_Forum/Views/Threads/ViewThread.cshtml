@@ -1,0 +1,41 @@
+﻿@using System.Web
+@model TAI_Forum.Models.ViewThreadModel
+@{
+    ViewBag.Title = Model.ThreadTopic;
+}
+
+<div class="jumbotron threadTitleBox">
+    <h1>@Model.ThreadTopic</h1>
+    <p>@Model.Tags</p>
+</div>
+
+
+@foreach (var t in Model.Messages)
+{
+    <div class="row singleArticle">
+        <div class="authorBox">
+            Autor: @t.Author
+        </div>
+        <div class="lead customLead">
+            @(new HtmlString(t.Content.Replace(Environment.NewLine,"<br />")))
+        </div>
+        @if (Model.IsLoggedIn && !Model.IsAdmin)
+        {
+            <div class="scoreBox">
+               @Html.ActionLink('\u21d1'.ToString(), "UpvoteMessage", "Messages", new { threadId = Model.ThreadId, ordNum = t.OrdNum }, new { @class = "upvoteBtn" })  
+               @t.Score 
+               @Html.ActionLink('\u21d3'.ToString(), "DownvoteMessage", "Messages", new { threadId = Model.ThreadId, ordNum = t.OrdNum }, new { @class = "downvoteBtn" })
+            </div>
+        }        
+        @if (Model.IsAdmin)
+        {
+            <div class="deMsglBox">
+                @Html.ActionLink("Usuń wiadomość", "DeleteMessage", "Messages", new { threadId = Model.ThreadId, ordNum = t.OrdNum }, new { @class = "btn btn-primary delThreadBtn" })
+            </div>
+        }
+        <div class="dateBox">
+            Wysłany: @t.PostDate.Substring(0, 19)
+        </div>
+    </div>
+}
+@Html.Partial("_NewMessagePartial", Model.MessageModel)

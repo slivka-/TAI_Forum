@@ -1,0 +1,22 @@
+﻿@using System.Web
+@model TAI_Forum.Models.MainViewModel
+@if (Model.IsLoggedIn)
+{
+    if (Model.IsAdmin)
+    {
+        <ul class="nav navbar-nav navbar-left adminBar">
+            <li>ADMINISTARTOR</li>
+        </ul>
+    }
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink(Model.UserLogin, "DisplayInfo", "Account", null, new { @class = "loginBold" })</li>
+        <li>@Html.ActionLink("Wyloguj się", "Logout", "Account")</li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Zarejestruj się", "DisplayRegister", "Account")</li>
+        <li><a href="#" class="btn" data-toggle="popover" data-placement="bottom" data-content="@HttpUtility.HtmlEncode(Html.Partial("_LoginPopover"))">Zaloguj się</a> </li>
+    </ul>
+}

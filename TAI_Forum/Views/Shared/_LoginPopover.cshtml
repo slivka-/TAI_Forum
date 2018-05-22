@@ -1,0 +1,8 @@
+﻿<div class="loginPopover">
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        <input type="text" id="login" name="login" class="form-control loginPopoverContent" placeholder="Login" />
+        <input type="password" id="password" name="password" class="form-control loginPopoverContent" placeholder="Hasło" />
+        <input type="submit" class="btn btn-primary loginPopoverContent" value="Zaloguj" />
+    }
+</div>

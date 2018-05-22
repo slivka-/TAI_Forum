@@ -1,0 +1,24 @@
+﻿@model TAI_Forum.Models.MessageModel
+
+@if (Model.IsLoggedIn)
+{
+    using (Html.BeginForm("CreateNewMessage", "Messages", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Twoja odpowiedź</h4>
+        <hr />
+        <div class = "text-danger">@((Model.ErrorMessage!=null)? Model.ErrorMessage : "")</div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.NewMessage, new { @class = "control-label" })
+            <div class="threadParthBox">
+                @Html.TextAreaFor(m => m.NewMessage, new { @class = "form-control threadTextArea" })
+            </div>
+        </div>
+        @Html.Hidden("ThreadId", Model.ThreadId)
+        <div class="form-group">
+            <div class="">
+                <input type="submit" class="btn btn-default" value="Dodaj odpowiedź" />
+            </div>
+        </div>
+    }
+}

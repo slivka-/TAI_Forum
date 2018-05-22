@@ -1,0 +1,44 @@
+﻿@using System.Web
+@model TAI_Forum.Models.IndexModel
+@{
+    ViewBag.Title = "Strona główna";
+}
+
+@if (Model.IndexMessage != null)
+{
+    <div class="alert alert-success alert-dismissible fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @Model.IndexMessage
+    </div>
+}
+
+<div class="jumbotron">
+    <h1>Forum nietematyczne</h1>
+    <p class="lead">Dyskutuj z innymi i dziel się opinią. Dowolną opinią! </p>
+</div>
+
+@if (Model.IsLoggedIn)
+{
+    <div class="row newThreadBtn">
+        @Html.ActionLink("Załóż nowy temat", "DisplayNewThread", "Threads", null, new { @class = "btn btn-primary newThreadBtnBtn" })
+    </div>
+}
+
+@foreach (var t in Model.ThreadsList)
+{
+    <div class="row singleArticle">
+        <div class="authorBox">
+            Autor:<br/>
+            @t.Author
+        </div>
+        <h2><strong>@Html.ActionLink(t.Topic, "ShowThread", "Threads", new { threadId = t.Id }, null)</strong></h2>
+        <p class="lead customLead">
+            @t.ContentLead ...
+        </p>
+        <p>@t.Tags</p>
+        @if (Model.IsAdmin)
+        {
+            @Html.ActionLink("Usuń wątek", "DeleteThread", "Threads", new { threadId = t.Id }, new { @class = "btn btn-primary delThreadBtn" })
+        }
+    </div>
+}
