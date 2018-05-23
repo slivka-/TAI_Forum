@@ -9,7 +9,7 @@ namespace TAI_Forum
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-1.11.3.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -25,9 +25,11 @@ namespace TAI_Forum
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/bootstrap-select.css",
                       "~/Content/Site.css"));
 
             bundles.Add(new StyleBundle("~/bundles/_mainScripts").Include(
+                      "~/Scripts/bootstrap-select.js",
                       "~/Scripts/_mainScript.js"));
         }
     }

@@ -9,3 +9,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('[data-toggle="collapse"]').collapse();
 });
+
+$(document).ready(function () {
+    $('.selectpicker').selectpicker();
+});

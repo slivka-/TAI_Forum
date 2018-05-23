@@ -9,7 +9,6 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/_mainScripts")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,6 +20,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Forum nietematyczne", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.Partial("_SearchBar")
             </div>
             <div class="navbar-collapse collapse">
                 @Html.Partial("_LoginPartial")
@@ -37,6 +37,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/_mainScripts")
+    <!--Scripts.Render("~/bundles/_mainScripts")-->
     @RenderSection("scripts", required: false)
 </body>
 </html>
