@@ -1,0 +1,27 @@
+﻿@model TAI_Forum.Models.SearchModel
+@{ 
+    ViewBag.Title = "Wyniki wyszukiwania dla:"+Model.Tag;
+}
+
+<div class="jumbotron">
+    <p class="lead">Wyniki wyszukiwania dla tagu: @Model.Tag </p>
+</div>
+
+@foreach (var t in Model.SearchThreadsList)
+{
+    <div class="row singleArticle">
+        <div class="authorBox">
+            Autor:<br />
+            @t.Author
+        </div>
+        <h2><strong>@Html.ActionLink(t.Topic, "ShowThread", "Threads", new { threadId = t.Id }, null)</strong></h2>
+        <p class="lead customLead">
+            @t.ContentLead ...
+        </p>
+        <p>Tagi: <strong>@t.Tags</strong></p>
+        @if (Model.IsAdmin)
+        {
+            @Html.ActionLink("Usuń wątek", "DeleteThread", "Threads", new { threadId = t.Id }, new { @class = "btn btn-primary delThreadBtn" })
+        }
+    </div>
+}

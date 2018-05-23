@@ -35,7 +35,7 @@
         <p class="lead customLead">
             @t.ContentLead ...
         </p>
-        <p>@t.Tags</p>
+        <p>Tagi: <strong>@t.Tags</strong></p>
         @if (Model.IsAdmin)
         {
             @Html.ActionLink("Usuń wątek", "DeleteThread", "Threads", new { threadId = t.Id }, new { @class = "btn btn-primary delThreadBtn" })

@@ -284,7 +284,13 @@ namespace TAI_Forum.Infrastructure
                     {
                         while (rdr.Read())
                         {
-                            output.Add(Tuple.Create(int.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), rdr[3].ToString(), rdr[4].ToString(), rdr[5].ToString()));
+                            var temp = rdr[3].ToString().Replace("#", "").Replace(";", " ").Replace(",", " ").Replace(".", " ").Trim().Split(' ').Where(w => !w.Trim().Equals("")).Distinct();
+
+                            StringBuilder b = new StringBuilder();
+                            foreach (var t in temp)
+                                b.Append(t + "; ");
+                                
+                            output.Add(Tuple.Create(int.Parse(rdr[0].ToString()), rdr[1].ToString(), rdr[2].ToString(), b.ToString(), rdr[4].ToString(), rdr[5].ToString()));
                         }
                     }
                 }
@@ -376,6 +382,7 @@ namespace TAI_Forum.Infrastructure
         public List<string> GetAllTags()
         {
             List<string> output = new List<string>();
+            Dictionary<string, int> tempDict = new Dictionary<string, int>();
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
@@ -386,19 +393,21 @@ namespace TAI_Forum.Infrastructure
                     {
                         while (rdr.Read())
                         {
-                            output.AddRange(rdr[0].ToString().Replace("#","").Replace(";", " ").Replace(",", " ").Replace(".", " ").Trim().Split(' ').Where(w => !w.Equals(" ")));
+                            var tempArr = rdr[0].ToString().Replace("#", "").Replace(";", " ").Replace(",", " ").Replace(".", " ").Trim().Split(' ').Where(w => !w.Trim().Equals(""));
+                            foreach (var t in tempArr)
+                            {
+                                if (tempDict.ContainsKey(t))
+                                    tempDict[t]++;
+                                else
+                                    tempDict.Add(t, 1);
+                            }
                         }
                     }
                 }
                 conn.Close();
             }
-            if (output.Count > 0)
-                output.GroupBy(g => g).Select(s => new
-                {
-                    Count = s.Count(),
-                    Name = s.Key,
-                    Tag = s.First()
-                }).OrderByDescending(o => o.Count).Select(s => s.Tag).ToList();
+            if (tempDict.Count > 0)
+                output = tempDict.OrderByDescending(o => o.Value).Select(s => s.Key).ToList();
             return output;
         }
 

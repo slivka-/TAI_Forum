@@ -37,7 +37,7 @@ textarea {
 }
 
 .adminBar {
-    padding-left:10px;
+    padding-left:20px;
     margin-top: 14px;
     color: red;
     font-weight: 500;
@@ -174,5 +174,4 @@ textarea {
 
 .searchBox{
     margin-top: 8px;
-    width: 40%;
 }

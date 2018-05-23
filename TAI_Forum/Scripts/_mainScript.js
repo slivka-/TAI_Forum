@@ -12,4 +12,8 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('.selectpicker').selectpicker();
+
+    $("#searchButton").click(function () {
+        window.location = "/Home/SearchForTag?tag=" + $("#selectBox option:selected").text();
+    });
 });

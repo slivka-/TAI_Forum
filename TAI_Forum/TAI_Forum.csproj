@@ -173,6 +173,7 @@
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\NewThreadModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\ViewThreadModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -227,6 +228,7 @@
     <Content Include="Views\Threads\_NewMessagePartial.cshtml" />
     <Content Include="Views\Account\EditAccountInfo.cshtml" />
     <Content Include="Views\Shared\_SearchBar.cshtml" />
+    <Content Include="Views\Home\SearchResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

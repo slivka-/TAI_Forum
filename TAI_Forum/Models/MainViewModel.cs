@@ -11,12 +11,14 @@ namespace TAI_Forum.Models
         public bool IsLoggedIn { get; set; }
         public string UserLogin { get; set; }
         public bool IsAdmin { get; set; }
+        public List<string> TagsList { get; set;}
 
         public MainViewModel()
         {
             IsLoggedIn = SessionAccess.IsLoggedIn;
             UserLogin = SessionAccess.UserLogin;
             IsAdmin = SessionAccess.IsAdmin;
+            TagsList = DatabaseAccess.Instance.GetAllTags();
         }
     }
 }

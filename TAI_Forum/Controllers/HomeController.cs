@@ -25,5 +25,20 @@ namespace TAI_Forum.Controllers
 
             return View("Index", model);
         }
+
+        public ViewResult SearchForTag(string tag)
+        {
+            List<SearchModel.SingleSearchThread> tList = new List<SearchModel.SingleSearchThread>();
+            DatabaseAccess client = DatabaseAccess.Instance;
+            
+
+            var th = client.GetAllThreads(tag);
+            foreach (var t in th)
+                tList.Add(new SearchModel.SingleSearchThread() { Id = t.Item1, Topic = t.Item2, ContentLead = t.Item3, Tags = t.Item4, Author = t.Item6 });
+
+            SearchModel model = new SearchModel() { SearchThreadsList = tList, Tag = tag };
+
+            return View("SearchResult", model);
+        }
     }
 }
