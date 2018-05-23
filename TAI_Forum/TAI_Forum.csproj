@@ -167,6 +167,7 @@
     <Compile Include="Infrastructure\DatabaseAccess.cs" />
     <Compile Include="Infrastructure\Extensions.cs" />
     <Compile Include="Infrastructure\SessionAccess.cs" />
+    <Compile Include="Models\AccountEditModel.cs" />
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\MainViewModel.cs" />
     <Compile Include="Models\MessageModel.cs" />
@@ -221,6 +222,8 @@
     <Content Include="Views\Threads\NewThread.cshtml" />
     <Content Include="Views\Threads\ViewThread.cshtml" />
     <Content Include="Views\Threads\_NewMessagePartial.cshtml" />
+    <Content Include="Views\Account\EditAccountInfo.cshtml" />
+    <Content Include="Views\Shared\_SearchBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

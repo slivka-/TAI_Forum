@@ -117,6 +117,105 @@ namespace TAI_Forum.Infrastructure
             return output;
         }
 
+        public Tuple<string, string> GetUserInfo(string login)
+        {
+            Tuple<string, string> output = null;
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string sql = string.Format("SELECT Name,Type FROM Users WHERE Name = '{0}'", login);
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            output = Tuple.Create(rdr[0].ToString(), rdr[1].ToString());
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return output;
+        }
+
+        public bool ConfirmUserPassword(string login, string password)
+        {
+            bool output = false;
+            string hash = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(password)).ToHexString();
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string sql = string.Format("SELECT Password FROM Users WHERE Name = '{0}'", login);
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            output = rdr[0].ToString().Equals(hash);
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return output;
+        }
+
+        public bool ChangeUserPassword(string login, string newPassword)
+        {
+            bool output = false;
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                using (var t = conn.BeginTransaction())
+                {
+                    string newHash = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(newPassword)).ToHexString();
+
+                    string sql = string.Format("UPDATE Users SET Password = '{0}' WHERE Name = '{1}'", newHash, login);
+                    using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                    {
+                        int r = cmd.ExecuteNonQuery();
+                        if (r != 1)
+                        {
+                            t.Rollback();
+                            return false;
+                        }
+                        output = true;
+                        t.Commit();
+                    }
+                }
+                conn.Close();
+            }
+            return output;
+        }
+
+        public Tuple<bool, string> ChangeUserLogin(string oldLogin, string newLogin)
+        {
+            Tuple<bool, string> output = null;
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                using (var t = conn.BeginTransaction())
+                {
+                    string sql = string.Format("UPDATE Users SET Name = '{0}' WHERE Name = '{1}'", newLogin, oldLogin);
+                    using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                    {
+                        int r = cmd.ExecuteNonQuery();
+                        if (r != 1)
+                        {
+                            t.Rollback();
+                            return Tuple.Create(false, "");
+                        }
+                        output = Tuple.Create(true, newLogin);
+                        t.Commit();
+                    }
+                }
+                conn.Close();
+            }
+            return output;
+        }
+
         #endregion
 
         #region Threads
@@ -167,13 +266,18 @@ namespace TAI_Forum.Infrastructure
             return Tuple.Create(true, threadId); ;
         }
 
-        public List<Tuple<int, string, string, string, string, string>> GetAllThreads()
+        public List<Tuple<int, string, string, string, string, string>> GetAllThreads(string tag = null)
         {
             List<Tuple<int, string, string, string, string, string>> output = new List<Tuple<int, string, string, string, string, string>>();
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
-                string countSql = string.Format("select T.ID, T.Name, substr(M.Content,0,30), T.Tags, M.PostDate, U.Name from Threads T LEFT JOIN Messages M ON T.ID = M.ThreadID LEFT JOIN Users U ON M.UserID = U.ID WHERE M.OrdNum = 1;");
+                string countSql = "";
+                if (tag == null)
+                    countSql = string.Format("select T.ID, T.Name, substr(M.Content,0,30), T.Tags, M.PostDate, U.Name from Threads T LEFT JOIN Messages M ON T.ID = M.ThreadID LEFT JOIN Users U ON M.UserID = U.ID WHERE M.OrdNum = 1;");
+                else
+                    countSql = string.Format("select T.ID, T.Name, substr(M.Content,0,30), T.Tags, M.PostDate, U.Name from Threads T LEFT JOIN Messages M ON T.ID = M.ThreadID LEFT JOIN Users U ON M.UserID = U.ID WHERE M.OrdNum = 1 AND T.Tags LIKE '%{0}%';", tag);
+
                 using (SQLiteCommand cmd = new SQLiteCommand(countSql, conn))
                 {
                     using (SQLiteDataReader rdr = cmd.ExecuteReader())
@@ -269,7 +373,34 @@ namespace TAI_Forum.Infrastructure
             return output;
         }
 
-
+        public List<string> GetAllTags()
+        {
+            List<string> output = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string countSql = string.Format("SELECT Tags FROM Threads");
+                using (SQLiteCommand cmd = new SQLiteCommand(countSql, conn))
+                {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            output.AddRange(rdr[0].ToString().Replace("#","").Replace(";", " ").Replace(",", " ").Replace(".", " ").Trim().Split(' ').Where(w => !w.Equals(" ")));
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            if (output.Count > 0)
+                output.GroupBy(g => g).Select(s => new
+                {
+                    Count = s.Count(),
+                    Name = s.Key,
+                    Tag = s.First()
+                }).OrderByDescending(o => o.Count).Select(s => s.Tag).ToList();
+            return output;
+        }
 
         #endregion
 

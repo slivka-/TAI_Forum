@@ -68,7 +68,73 @@ namespace TAI_Forum.Controllers
 
         public ActionResult DisplayInfo()
         {
-            return RedirectToAction("Index", "Home");
+            DatabaseAccess client = DatabaseAccess.Instance;
+            var result = client.GetUserInfo(SessionAccess.UserLogin);
+            var model = new AccountEditModel { UserLogin = result.Item1, Status = result.Item2 };
+            return View("EditAccountInfo", model);
+        }
+
+        public ActionResult ChangeLogin(AccountEditModel model)
+        {
+            DatabaseAccess client = DatabaseAccess.Instance;
+            if (client.ConfirmUserPassword(SessionAccess.UserLogin, model.NewLoginPassword))
+            {
+                var result = client.ChangeUserLogin(SessionAccess.UserLogin, model.Login);
+                if (result.Item1)
+                {
+                    string status = model.Status;
+                    bool isAdmin = SessionAccess.IsAdmin;
+                    SetUserInfo(result.Item2, isAdmin);
+                    model = new AccountEditModel()
+                    {
+                        EditMessage = "Login zmieniony",
+                        EditMessageClass = "success",
+                        Login = result.Item2,
+                        Status = status
+                    };
+                    return View("EditAccountInfo", model);
+                }
+                else
+                {
+                    model.EditMessage = "Błąd, spróbuj ponownie później.";
+                    model.EditMessageClass = "warning";
+                    return View("EditAccountInfo", model);
+                }
+            }
+            else
+            {
+                model.EditMessage = "Błędne hasło!";
+                model.EditMessageClass = "warning";
+                return View("EditAccountInfo", model);
+            }
+        }
+
+        public ActionResult ChangePassword(AccountEditModel model)
+        {
+            DatabaseAccess client = DatabaseAccess.Instance;
+            if (client.ConfirmUserPassword(SessionAccess.UserLogin, model.NewPasswordPassword))
+            {
+                bool result = client.ChangeUserPassword(SessionAccess.UserLogin, model.NewPassword);
+                if (result)
+                {
+                    model.NewPassword = "";
+                    model.EditMessage = "Hasło zmienione";
+                    model.EditMessageClass = "success";
+                    return View("EditAccountInfo", model);
+                }
+                else
+                {
+                    model.EditMessage = "Błąd, spróbuj ponownie później.";
+                    model.EditMessageClass = "warning";
+                    return View("EditAccountInfo", model);
+                }
+            }
+            else
+            {
+                model.EditMessage = "Błędne hasło!";
+                model.EditMessageClass = "warning";
+                return View("EditAccountInfo", model);
+            }
         }
     }
 }
